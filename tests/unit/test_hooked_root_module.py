@@ -1,13 +1,13 @@
 from unittest.mock import Mock
 
-from transformer_lens.hook_points import HookedRootModule
+from transformer_lens.hook_points import HookedRootModule, HookPoint
 
 MODEL_NAME = "solu-2l"
 
 
 def test_enable_hook_with_name():
     model = HookedRootModule()
-    model.mod_dict = {"linear": Mock()}
+    model.mod_dict = {"linear": Mock(spec=HookPoint)}
     model.context_level = 5
 
     hook = lambda x: False
@@ -24,8 +24,8 @@ def test_enable_hooks_for_points():
     model.context_level = 5
 
     hook_points = {
-        "linear": Mock(),
-        "attn": Mock(),
+        "linear": Mock(spec=HookPoint),
+        "attn": Mock(spec=HookPoint),
     }
 
     enabled = lambda x: x == "attn"
@@ -44,7 +44,7 @@ def test_enable_hooks_for_points():
 
 def test_enable_hook_with_string_param():
     model = HookedRootModule()
-    model.mod_dict = {"linear": Mock()}
+    model.mod_dict = {"linear": Mock(spec=HookPoint)}
     model.context_level = 5
 
     hook = lambda x: False
@@ -57,10 +57,10 @@ def test_enable_hook_with_string_param():
 
 def test_enable_hook_with_callable_param():
     model = HookedRootModule()
-    model.mod_dict = {"linear": Mock()}
+    model.mod_dict = {"linear": Mock(spec=HookPoint)}
     model.hook_dict = {
-        "linear": Mock(),
-        "attn": Mock(),
+        "linear": Mock(spec=HookPoint),
+        "attn": Mock(spec=HookPoint),
     }
     model.context_level = 5
 
